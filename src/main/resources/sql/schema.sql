@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS artist;
+
+CREATE TABLE artist
+(
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(20),
+  fee DOUBLE,
+  PRIMARY KEY (id)
+;
+
+CREATE TABLE artist
+(
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(20),
+  fee DOUBLE,
+  PRIMARY KEY (id)
+);
