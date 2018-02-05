@@ -3,7 +3,6 @@ package pnodder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import pnodder.config.AppConfig;
-import pnodder.config.MessagingConfig;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -14,7 +13,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {AppConfig.class, MessagingConfig.class};
+        return new Class[] {AppConfig.class};
     }
 
     @Override

@@ -1,15 +1,19 @@
 package pnodder.model;
 
-import java.sql.Date;
-import java.sql.Time;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 public class Event {
     
     private Integer id;
     private String name;
-    private Date date;
-    private Time time;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime finishTime;
     private Set<Artist> artists;
 
     public Integer getId() {
@@ -28,20 +32,28 @@ public class Event {
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Time getTime() {
-        return time;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(LocalTime finishTime) {
+        this.finishTime = finishTime;
     }
 
     public Set<Artist> getArtists() {

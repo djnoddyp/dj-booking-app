@@ -8,31 +8,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import pnodder.formatters.BikeFormatter;
-import pnodder.model.Order;
-import pnodder.services.BikeService;
-import pnodder.services.OrderService;
+import pnodder.converters.ArtistFormatter;
+import pnodder.converters.EventFormatter;
+import pnodder.model.Event;
+import pnodder.services.ArtistService;
+import pnodder.services.EventService;
 
 @Controller
-public class OrderController {
+public class EventController {
 
-    private BikeService bikeService;
-    private OrderService orderService;
+    private ArtistService artistService;
+    private EventService eventService;
 
-    public OrderController(BikeService bikeService, OrderService orderService) {
-        this.bikeService = bikeService;
-        this.orderService = orderService;
+    public EventController(ArtistService artistService, EventService eventService) {
+        this.artistService = artistService;
+        this.eventService = eventService;
     }
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.addCustomFormatter(new BikeFormatter(bikeService));
+        binder.addCustomFormatter(new ArtistFormatter(artistService));
+        binder.addCustomFormatter(new EventFormatter(eventService));
     }
 
     @ModelAttribute
     public void populateModel(Model model) {
-        model.addAttribute("allBikes", bikeService.findAll());
-        model.addAttribute("order", new Order());
+        model.addAttribute("allArtists", artistService.findAll());
+        model.addAttribute("event", new Event());
     }
 
 //    @GetMapping("/home")
@@ -45,18 +47,18 @@ public class OrderController {
 //        return "bikes";
 //    }
 
-    @GetMapping("/order")
+    @GetMapping("/event")
     public String getOrder() {
-        return "order";
+        return "event";
     }
 
-    @PostMapping("/submitorder")
-    public String submitOrder(Order order, BindingResult bindingResult) {
+    @PostMapping("/submitevent")
+    public String submitOrder(Event event, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            orderService.submitOrder(order);
-            return "redirect:/order";
+            eventService.save(event);
+            return "redirect:/event";
         } else {
-            return "order";
+            return "event";
         }
     }
 

@@ -60,15 +60,27 @@
     <div class="container">
       <div class="row">
         <div class="col-sm">
-          <form action="#" th:action="@{/submitorder}" th:object="${order}" method="post">
+          <form action="#" th:action="@{/submitevent}" th:object="${event}" method="post">
             <div class="form-group">
-              <label for="exampleFormControlInput1">email</label>
-              <input type="email" th:field="*{email}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+              <label for="exampleFormControlInput1">name</label>
+              <input type="text" th:field="*{name}" class="form-control" id="exampleFormControlInput1">
             </div>
             <div class="form-group">
-              <label for="exampleFormControlSelect1">item</label>
-              <select class="form-control" id="exampleFormControlSelect1" th:field="*{bike}">
-                <option th:each="b : ${allBikes}" th:value="${b.id}" th:text="${b.make + ' ' + b.model + ' £' + b.price}">some item</option>
+              <label for="exampleFormControlInput1">date</label>
+              <input type="date" th:field="*{date}" class="form-control" id="exampleFormControlInput2">
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlInput1">start</label>
+              <input type="time" th:field="*{startTime}" class="form-control" id="exampleFormControlInput3">
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlInput1">finish</label>
+              <input type="time" th:field="*{finishTime}" class="form-control" id="exampleFormControlInput4">
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">artists</label>
+              <select class="form-control" id="exampleFormControlSelect1" th:field="*{artists}" multiple>
+                <option th:each="b : ${allArtists}" th:value="${b.id}" th:text="${b.getName()}">some item</option>
               </select>
             </div>
             <button type="submit" class="btn btn-primary">submit</button>
