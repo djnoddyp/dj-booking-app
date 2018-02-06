@@ -6,14 +6,21 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 
-public class Event {
+public class Booking {
     
     private Integer id;
+    
     private String name;
+    
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime startTime;
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime finishTime;
+    
     private Set<Artist> artists;
 
     public Integer getId() {

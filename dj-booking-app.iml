@@ -108,5 +108,7 @@
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.1" level="project" />
     <orderEntry type="library" name="Maven: org.jasypt:jasypt:1.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.activemq:activemq-all:5.15.2" level="project" />
+    <orderEntry type="library" name="org.thymeleaf:thymeleaf:Release1" level="project" />
+    <orderEntry type="library" name="org.thymeleaf:thymeleaf-spring4:Release1" level="project" />
   </component>
 </module>
