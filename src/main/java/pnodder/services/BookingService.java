@@ -27,4 +27,9 @@ public class BookingService {
         repository.save(booking);
     }
 
+    public Booking findBookingByName(String name) {
+        List<Booking> bookings = repository.findByName(name);
+
+    }
+
 }

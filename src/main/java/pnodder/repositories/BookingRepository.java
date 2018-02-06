@@ -5,10 +5,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import pnodder.model.Artist;
 import pnodder.model.Booking;
+import pnodder.services.ArtistService;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,9 +18,11 @@ import java.util.Set;
 public class BookingRepository {
 
     private JdbcTemplate jdbcTemplate;
+    private ArtistService artistService;
 
-    public BookingRepository(DataSource dataSource) {
+    public BookingRepository(DataSource dataSource, ArtistService artistService) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        this.artistService = artistService;
     }
 
     private static final class BookingMapper implements RowMapper<Booking> {
@@ -30,9 +34,14 @@ public class BookingRepository {
             booking.setDate(resultSet.getDate("Date").toLocalDate());
             booking.setStartTime(resultSet.getTime("StartTime").toLocalTime());
             booking.setFinishTime(resultSet.getTime("FinishTime").toLocalTime());
-            booking.setArtists(resultSet.getObject("Artists", Set.class));
+            //booking.setArtists(resultSet.getObject("Artists", Set.class));
             return booking;
         }
+
+//        private Set<Artist> resolveArtists() {
+//            Set<Artist> artists = new HashSet<>();
+//            for (Booking b : )
+//        }
     }
 
     public List<Booking> findAll() {
@@ -43,6 +52,13 @@ public class BookingRepository {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM Bookings WHERE id = ?",
                 new Object[]{id},
+                new BookingMapper());
+    }
+
+    public List<Booking> findByName(String name) {
+        return jdbcTemplate.query(
+                "SELECT * FROM Bookings WHERE Name = ?",
+                new Object[]{name},
                 new BookingMapper());
     }
 

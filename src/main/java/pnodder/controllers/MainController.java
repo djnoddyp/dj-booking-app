@@ -4,10 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pnodder.converters.ArtistFormatter;
 import pnodder.converters.BookingFormatter;
 import pnodder.model.Booking;
@@ -35,7 +32,7 @@ public class MainController {
     public void populateModel(Model model) {
         model.addAttribute("allArtists", artistService.findAll());
         model.addAttribute("booking", new Booking());
-        model.addAttribute("allBookings", bookingService.findAll());
+        //model.addAttribute("allBookings", bookingService.findAll());
     }
 
     @GetMapping("/booking")
@@ -57,5 +54,11 @@ public class MainController {
     public String getAllBookings() {
         return "bookings";
     }
-    
+
+    @GetMapping("/bookings/{name}")
+    public String getBookingsByName(@PathVariable String name, Model model) {
+        model.addAttribute("namedBooking", bookingService.findBookingByname(name));
+        return "bookings";
+    }
+
 }
