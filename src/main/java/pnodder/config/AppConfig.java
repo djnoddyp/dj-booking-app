@@ -87,9 +87,9 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
     }
 
     private Resource[] getInitScripts() {
-        Resource[] scripts = new Resource[2];
+        Resource[] scripts = new Resource[1];
         scripts[0] = ctx.getResource("classpath:/sql/schema.sql");
-        scripts[1] = ctx.getResource("classpath:/sql/data.sql");
+        //scripts[1] = ctx.getResource("classpath:/sql/data.sql");
         return scripts;
     }
 

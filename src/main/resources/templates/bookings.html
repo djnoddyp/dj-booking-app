@@ -9,7 +9,9 @@
   <title>Starter Template for Bootstrap</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="/webjars/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!--<link href="/webjars/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />-->
 
   <!-- Custom styles for this template -->
   <!--<link href="./starter-template.css" rel="stylesheet">-->
@@ -43,7 +45,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">start here</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="/bookings">my bookings</a>
+          <a class="dropdown-item" href="/mybookings">my bookings</a>
           <a class="dropdown-item" href="/other">other shit</a>
         </div>
       </li>
@@ -56,27 +58,47 @@
 </nav>
 
 <main role="main" class="container">
-  <div class="container" th:unless="${#lists.isEmpty(allBookings)}">
+  <div class="container">
+    <!--<form action="#" th:action="@{/bookings}">-->
+      <!--<div class="form-group">-->
+        <!--<label for="exampleFormControlInput1">booking name</label>-->
+        <!--<input type="text" class="form-control" id="exampleFormControlInput1" aria-describedby="emailHelp" th:name="name">-->
+      <!--</div>-->
+      <!--<button type="submit" class="btn btn-primary">search</button>-->
+    <!--</form>-->
+
     <table class="table">
       <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">name</th>
-          <th scope="col">date</th>
-          <th scope="col">start</th>
-          <th scope="col">finish</th>
-          <th scope="col">artists</th>
-        </tr>
+      <tr>
+        <th scope="col">name</th>
+        <th scope="col">date</th>
+        <th scope="col">start</th>
+        <th scope="col">finish</th>
+        <th scope="col">artists</th>
+      </tr>
       </thead>
       <tbody>
-        <tr th:each="b : ${allBookings}">
-          <th scope="row" th:text="${b.id}">1</th>
-          <td th:text="${b.name}">Mark</td>
-          <td th:text="${b.date}">Otto</td>
-          <td th:text="${b.startTime}">@mdo</td>
-          <td th:text="${b.finishTime}">@mdo</td>
-          <!--<td th:text="${b.artists}">@mdo</td>-->
-        </tr>
+      <tr th:each="b : ${allBookings}">
+        <td th:text="${b.name}">Mark</td>
+        <td th:text="${b.date}">Otto</td>
+        <td th:text="${b.startTime}">@mdo</td>
+        <td th:text="${b.finishTime}">@mdo</td>
+        <td>
+          <table>
+            <tbody>
+            <tr th:each="a : ${b.artists}">
+              <td th:text="${a.name}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </td>
+        <form action="#" th:action="@{/editbooking}" method="post">
+          <td><button class="btn btn-primary" type="submit" th:value="${b.id}" name="bookingId">edit</button></td>
+        </form>
+        <form action="#" th:action="@{/deletebooking}" method="post">
+          <td><button class="btn btn-primary" type="submit" th:value="${b.id}" name="bookingId">delete</button></td>
+        </form>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -85,9 +107,15 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="/webjars/jquery/3.0.0/jquery.min.js"><\/script>')</script>
-<script src="/webjars/popper.js/1.11.1/dist/umd/popper.min.js"></script>
-<script src="/webjars/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+<!--<script>window.jQuery || document.write('<script src="/webjars/jquery/3.0.0/jquery.min.js"><\/script>')</script>-->
+<!--<script src="/webjars/popper.js/1.11.1/dist/popper.min.js"></script>-->
+<!--<script src="/webjars/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 </body>
 </html>

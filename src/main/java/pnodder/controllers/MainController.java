@@ -29,14 +29,14 @@ public class MainController {
     }
 
     @ModelAttribute
-    public void populateModel(Model model) {
-        model.addAttribute("allArtists", artistService.findAll());
-        model.addAttribute("booking", new Booking());
-        //model.addAttribute("allBookings", bookingService.findAll());
+    public void initialiseModel(Model model) {
+        model.addAttribute("bookingId", new Integer(0));
     }
 
     @GetMapping("/booking")
-    public String getBookingForm() {
+    public String getBookingForm(Model model) {
+        model.addAttribute("allArtists", artistService.findAll());
+        model.addAttribute("booking", new Booking());
         return "booking";
     }
 
@@ -50,15 +50,22 @@ public class MainController {
         }
     }
     
-    @GetMapping
-    public String getAllBookings() {
+    @GetMapping("/mybookings")
+    public String getMyBookings(Model model) {
+        model.addAttribute("allBookings", bookingService.findAllDistinct());
         return "bookings";
     }
 
-    @GetMapping("/bookings/{name}")
-    public String getBookingsByName(@PathVariable String name, Model model) {
-        model.addAttribute("namedBooking", bookingService.findBookingByname(name));
-        return "bookings";
+    @PostMapping("/editbooking")
+    public String editBooking(@RequestParam("bookingId") Integer id) {
+        System.out.println("ID received: " + id);
+        return "redirect:/booking";
+    }
+
+    @PostMapping("/deletebooking")
+    public String deleteBooking(@RequestParam("bookingId") Integer id) {
+        bookingService.deleteById(id);
+        return "redirect:/mybookings";
     }
 
 }

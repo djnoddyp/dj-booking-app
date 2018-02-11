@@ -25,7 +25,11 @@ public class BookingRepository {
         this.artistService = artistService;
     }
 
-    private static final class BookingMapper implements RowMapper<Booking> {
+    private ArtistService getArtistService() {
+        return artistService;
+    }
+
+    private final class BookingMapper implements RowMapper<Booking> {
         @Override
         public Booking mapRow(ResultSet resultSet, int i) throws SQLException {
             Booking booking = new Booking();
@@ -34,14 +38,17 @@ public class BookingRepository {
             booking.setDate(resultSet.getDate("Date").toLocalDate());
             booking.setStartTime(resultSet.getTime("StartTime").toLocalTime());
             booking.setFinishTime(resultSet.getTime("FinishTime").toLocalTime());
-            //booking.setArtists(resultSet.getObject("Artists", Set.class));
+            booking.setArtists(resolveArtist(resultSet.getInt("ArtistID")));
             return booking;
         }
 
-//        private Set<Artist> resolveArtists() {
-//            Set<Artist> artists = new HashSet<>();
-//            for (Booking b : )
-//        }
+        private Set<Artist> resolveArtist(int artistID) {
+            Set<Artist> artists = new HashSet<>();
+            Artist artist = BookingRepository.this.getArtistService().findById(artistID);
+            artists.add(artist);
+            return artists;
+        }
+
     }
 
     public List<Booking> findAll() {
@@ -68,6 +75,14 @@ public class BookingRepository {
                             "VALUES (?, ?, ?, ?, ?)", booking.getName(), booking.getDate(), booking.getStartTime(),
                     booking.getFinishTime(), a.getId());
         }
+    }
+
+    public List<String> findDistinctName() {
+        return jdbcTemplate.queryForList("SELECT DISTINCT Name FROM Bookings", String.class);
+    }
+
+    public void deleteById(Integer id) {
+        jdbcTemplate.update("DELETE FROM Bookings WHERE ID = ?", id);
     }
 
 }
