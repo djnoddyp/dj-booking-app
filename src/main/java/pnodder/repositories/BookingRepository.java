@@ -1,6 +1,8 @@
 package pnodder.repositories;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import pnodder.model.Artist;
@@ -48,7 +50,13 @@ public class BookingRepository {
             artists.add(artist);
             return artists;
         }
-
+    }
+    
+    private final class BookingExtractor implements ResultSetExtractor<Booking> {
+        @Override
+        public Booking extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+            return null;
+        }
     }
 
     public List<Booking> findAll() {
@@ -80,9 +88,9 @@ public class BookingRepository {
     public List<String> findDistinctName() {
         return jdbcTemplate.queryForList("SELECT DISTINCT Name FROM Bookings", String.class);
     }
-
-    public void deleteById(Integer id) {
-        jdbcTemplate.update("DELETE FROM Bookings WHERE ID = ?", id);
+    
+    public void deleteByName(String name) {
+        jdbcTemplate.update("DELETE FROM Bookings WHERE Name = ?", name);
     }
 
 }

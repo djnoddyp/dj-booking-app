@@ -59,50 +59,67 @@
 
 <main role="main" class="container">
   <div class="container">
-    <!--<form action="#" th:action="@{/bookings}">-->
-      <!--<div class="form-group">-->
-        <!--<label for="exampleFormControlInput1">booking name</label>-->
-        <!--<input type="text" class="form-control" id="exampleFormControlInput1" aria-describedby="emailHelp" th:name="name">-->
-      <!--</div>-->
-      <!--<button type="submit" class="btn btn-primary">search</button>-->
-    <!--</form>-->
+    <div class="row">
+      <div class="col-sm">
+        <form action="#" th:action="@{/updatebooking}" th:object="${booking}" method="post">
+          <div class="form-group">
+            <label for="exampleFormControlInput1">name</label>
+            <input type="text" th:field="*{name}" th:placeholder="${bookingedit.name}" class="form-control" id="exampleFormControlInput1">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">date</label>
+            <input type="date" th:field="*{date}" class="form-control" id="exampleFormControlInput2">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">start</label>
+            <input type="time" th:field="*{startTime}" class="form-control" id="exampleFormControlInput3">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">finish</label>
+            <input type="time" th:field="*{finishTime}" class="form-control" id="exampleFormControlInput4">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">artists</label>
+            <select class="form-control" id="exampleFormControlSelect1" th:field="*{artists}" multiple>
+              <option th:each="b : ${allArtists}" th:value="${b.id}" th:text="${b.getName()}">some item</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" th:value="${bookingedit.name}" name="bookingName">submit</button>
+        </form>
+      </div>
+      <div class="col-sm">
 
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col">name</th>
-        <th scope="col">date</th>
-        <th scope="col">start</th>
-        <th scope="col">finish</th>
-        <th scope="col">artists</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="b : ${allBookings}">
-        <td th:text="${b.name}">Mark</td>
-        <td th:text="${b.date}">Otto</td>
-        <td th:text="${b.startTime}">@mdo</td>
-        <td th:text="${b.finishTime}">@mdo</td>
-        <td>
-          <table>
-            <tbody>
-            <tr th:each="a : ${b.artists}">
-              <td th:text="${a.name}"></td>
-            </tr>
-            </tbody>
-          </table>
-        </td>
-        <form action="#" th:action="@{/editbooking}" method="post">
-          <td><button class="btn btn-primary" type="submit" th:value="${b.name}" name="bookingName">edit</button></td>
-        </form>
-        <form action="#" th:action="@{/deletebooking}" method="post">
-          <td><button class="btn btn-primary" type="submit" th:value="${b.name}" name="bookingName">delete</button></td>
-        </form>
-      </tr>
-      </tbody>
-    </table>
+      </div>
+      <div class="col-sm">
+
+      </div>
+      <!--<div class="col-sm">-->
+      <!--<table class="table table-bordered">-->
+      <!--<thead class="thead-dark">-->
+      <!--<tr>-->
+      <!--<th scope="col">email</th>-->
+      <!--<th scope="col">item</th>-->
+      <!--<th scope="col">price</th>-->
+      <!--</tr>-->
+      <!--</thead>-->
+      <!--<tbody>-->
+      <!--<tr th:each="item : ${basketItems}">-->
+      <!--<td th:text="${item.email}">Mark</td>-->
+      <!--<td th:text="${item.bike.model}">Otto</td>-->
+      <!--<td th:text="${item.bike.price}">@mdo</td>-->
+      <!--</tr>-->
+      <!--<tr>-->
+      <!--<td></td>-->
+      <!--<td>total</td>-->
+      <!--<td></td>-->
+      <!--</tr>-->
+      <!--</tbody>-->
+      <!--</table>-->
+      <!--</div>-->
+    </div>
   </div>
 </main>
+
 
 <!-- Bootstrap core JavaScript
 ================================================== -->

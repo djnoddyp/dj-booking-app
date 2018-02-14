@@ -58,9 +58,13 @@ public class BookingService {
         return booking;
     }
 
-    public void deleteById(Integer id) {
-
-        repository.deleteById(id);
+    public void deleteByName(String name) {
+        repository.deleteByName(name);
     }
-
+    
+    public void updateByName(String name, Booking booking) {
+        deleteByName(name);
+        save(booking);
+    }
+    
 }

@@ -1,5 +1,6 @@
 package pnodder.controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,16 +28,15 @@ public class MainController {
         binder.addCustomFormatter(new ArtistFormatter(artistService));
         binder.addCustomFormatter(new BookingFormatter(bookingService));
     }
-
+    
     @ModelAttribute
     public void initialiseModel(Model model) {
-        model.addAttribute("bookingId", new Integer(0));
+        model.addAttribute("allArtists", artistService.findAll());
+        model.addAttribute("booking", new Booking());
     }
 
     @GetMapping("/booking")
     public String getBookingForm(Model model) {
-        model.addAttribute("allArtists", artistService.findAll());
-        model.addAttribute("booking", new Booking());
         return "booking";
     }
 
@@ -57,15 +57,27 @@ public class MainController {
     }
 
     @PostMapping("/editbooking")
-    public String editBooking(@RequestParam("bookingId") Integer id) {
-        System.out.println("ID received: " + id);
-        return "redirect:/booking";
+    public String editBooking(@RequestParam("bookingName") String name, Model model) {
+        model.addAttribute("bookingedit", bookingService.findBookingByName(name));
+        return "editbooking";
     }
 
     @PostMapping("/deletebooking")
-    public String deleteBooking(@RequestParam("bookingId") Integer id) {
-        bookingService.deleteById(id);
+    public String deleteBooking(@RequestParam("bookingName") String name) {
+        bookingService.deleteByName(name);
         return "redirect:/mybookings";
+    }
+    
+    @PostMapping("/updatebooking")
+    public String updateBooking(Booking booking,
+                              @RequestParam("bookingName") String name,
+                              BindingResult bindingResult) {
+        if (!bindingResult.hasErrors()) {
+            bookingService.updateByName(name, booking);
+            return "redirect:/mybookings";
+        } else {
+            return "editbooking";
+        }
     }
 
 }
