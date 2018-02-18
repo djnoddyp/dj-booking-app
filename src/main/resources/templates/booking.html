@@ -23,6 +23,9 @@
       padding: 3rem 1.5rem;
       text-align: center;
     }
+    .fieldError {
+      color: red;
+    }
   </style>
 </head>
 
@@ -65,18 +68,24 @@
             <div class="form-group">
               <label for="exampleFormControlInput1">name</label>
               <input type="text" th:field="*{name}" class="form-control" id="exampleFormControlInput1">
+              <!--<ul>-->
+                <!--<li th:each="e : ${#fields.errors('name')}" th:text="${'name: ' + e}">input is incorrect</li>-->
+              <!--</ul>-->
             </div>
             <div class="form-group">
               <label for="exampleFormControlInput1">date</label>
               <input type="date" th:field="*{date}" class="form-control" id="exampleFormControlInput2">
+              <!--<ul>-->
+                <!--<li th:each="e : ${#fields.errors('date')}" th:text="${e}">input is incorrect</li>-->
+              <!--</ul>-->
             </div>
             <div class="form-group">
               <label for="exampleFormControlInput1">start</label>
-              <input type="time" th:field="*{startTime}" class="form-control" id="exampleFormControlInput3">
+              <input type="time" th:field="*{start}" class="form-control" id="exampleFormControlInput3">
             </div>
             <div class="form-group">
               <label for="exampleFormControlInput1">finish</label>
-              <input type="time" th:field="*{finishTime}" class="form-control" id="exampleFormControlInput4">
+              <input type="time" th:field="*{finish}" class="form-control" id="exampleFormControlInput4">
             </div>
             <div class="form-group">
               <label for="exampleFormControlSelect1">artists</label>
@@ -85,6 +94,10 @@
               </select>
             </div>
             <button type="submit" class="btn btn-primary">submit</button>
+            <br><br>
+            <ul th:if="${#fields.hasErrors('*')}">
+              <li class="fieldError" th:each="e : ${#fields.detailedErrors('*')}" th:text="${e.getFieldName() + ': ' + e.getMessage()}">input is incorrect</li>
+            </ul>
           </form>
         </div>
         <div class="col-sm">

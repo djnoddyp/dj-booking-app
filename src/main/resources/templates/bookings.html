@@ -75,14 +75,15 @@
         <th scope="col">start</th>
         <th scope="col">finish</th>
         <th scope="col">artists</th>
+        <th scope="col">cost</th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="b : ${allBookings}">
         <td th:text="${b.name}">Mark</td>
-        <td th:text="${b.date}">Otto</td>
-        <td th:text="${b.startTime}">@mdo</td>
-        <td th:text="${b.finishTime}">@mdo</td>
+        <td th:text="${{b.date}}">Otto</td>
+        <td th:text="${b.start}">@mdo</td>
+        <td th:text="${b.finish}">@mdo</td>
         <td>
           <table>
             <tbody>
@@ -92,6 +93,7 @@
             </tbody>
           </table>
         </td>
+        <td th:text="${{b.cost}}">@mdo</td>
         <form action="#" th:action="@{/editbooking}" method="post">
           <td><button class="btn btn-primary" type="submit" th:value="${b.name}" name="bookingName">edit</button></td>
         </form>

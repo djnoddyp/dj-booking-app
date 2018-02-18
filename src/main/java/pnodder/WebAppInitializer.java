@@ -1,24 +1,45 @@
 package pnodder;
 
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import pnodder.config.AppConfig;
-import pnodder.config.SecurityConfig;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] {SecurityConfig.class};
+        return new Class[0];
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {AppConfig.class};
+        return new Class[] {AppConfig.class}; //SecurityConfig.class
     }
 
     @Override
     protected String[] getServletMappings() {
         return new String[] {"/"};
     }
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy("shiroFilter");
+        delegatingFilterProxy.setTargetFilterLifecycle(true);
+        servletContext
+                .addFilter("shiroFilter", delegatingFilterProxy)
+                .addMappingForUrlPatterns(null, false, "/*");
+        super.onStartup(servletContext);
+    }
+
+//    @Override
+//    protected Filter[] getServletFilters() {
+//        DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy("shiroFilter");
+//        delegatingFilterProxy.setTargetFilterLifecycle(true);
+//        return new Filter[] {delegatingFilterProxy};
+//    }
 }

@@ -33,6 +33,16 @@ public class BookingService {
         names.forEach(name -> {
             bookings.add(findBookingByName(name));
         });
+        // sort bookings by date, soonest first
+        bookings.sort((b1, b2) -> {
+            if (b1.getDate().isAfter(b2.getDate())) {
+                return 1;
+            } else if (b1.getDate().isBefore(b2.getDate())) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
         return bookings;
     }
 
@@ -44,17 +54,20 @@ public class BookingService {
         List<Booking> bookings = repository.findByName(name);
         Booking booking = new Booking();
         Set<Artist> artistSet = new HashSet<>();
+        Double cost = 0d;
         for (Booking b : bookings) {
             artistSet.add(b.getArtists().iterator().next());
+            cost += b.getArtists().iterator().next().getFee();
             if (booking.getName() == null) {
                 booking.setId(b.getId());
                 booking.setName(b.getName());
                 booking.setDate(b.getDate());
-                booking.setStartTime(b.getStartTime());
-                booking.setFinishTime(b.getFinishTime());
+                booking.setStart(b.getStart());
+                booking.setFinish(b.getFinish());
             }
         }
         booking.setArtists(artistSet);
+        booking.setCost(cost);
         return booking;
     }
 

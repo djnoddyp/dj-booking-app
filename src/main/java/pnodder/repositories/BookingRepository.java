@@ -38,8 +38,8 @@ public class BookingRepository {
             booking.setId(resultSet.getInt("ID"));
             booking.setName(resultSet.getString("Name"));
             booking.setDate(resultSet.getDate("Date").toLocalDate());
-            booking.setStartTime(resultSet.getTime("StartTime").toLocalTime());
-            booking.setFinishTime(resultSet.getTime("FinishTime").toLocalTime());
+            booking.setStart(resultSet.getTime("StartTime").toLocalTime());
+            booking.setFinish(resultSet.getTime("FinishTime").toLocalTime());
             booking.setArtists(resolveArtist(resultSet.getInt("ArtistID")));
             return booking;
         }
@@ -80,8 +80,8 @@ public class BookingRepository {
     public void save(Booking booking) {
         for (Artist a : booking.getArtists()) {
             jdbcTemplate.update("INSERT INTO Bookings (Name, Date, StartTime, FinishTime, ArtistID) " +
-                            "VALUES (?, ?, ?, ?, ?)", booking.getName(), booking.getDate(), booking.getStartTime(),
-                    booking.getFinishTime(), a.getId());
+                            "VALUES (?, ?, ?, ?, ?)", booking.getName(), booking.getDate(), booking.getStart(),
+                    booking.getFinish(), a.getId());
         }
     }
 

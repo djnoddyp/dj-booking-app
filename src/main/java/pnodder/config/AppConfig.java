@@ -5,22 +5,17 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
-
-import javax.annotation.PostConstruct;
 
 @EnableWebMvc
 @Configuration
@@ -65,17 +60,8 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         return viewResolver;
     }
 
-    /* ####### Datasource beans ####### */
-    @PostConstruct
-    public void dataSourceInitializer() {
-        DataSourceInitializer initializer = new DataSourceInitializer();
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScripts(getInitScripts());
-        initializer.setDataSource(dataSource());
-        initializer.setDatabasePopulator(populator);
-        initializer.afterPropertiesSet();
-    }
 
+    /* ####### Datasource beans ####### */
     @Bean
     public BasicDataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
@@ -86,17 +72,28 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         return dataSource;
     }
 
-    private Resource[] getInitScripts() {
-        Resource[] scripts = new Resource[1];
-        scripts[0] = ctx.getResource("classpath:/sql/schema.sql");
-        //scripts[1] = ctx.getResource("classpath:/sql/data.sql");
-        return scripts;
+    @Bean
+    public ResourceDatabasePopulator databasePopulator() throws Exception {
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(new ClassPathResource("sql/schema.sql"));
+        // execute this on first startup only
+        //populator.addScript(new ClassPathResource("sql/data.sql"));
+        populator.populate(dataSource().getConnection());
+        return populator;
     }
 
+
     /* ####### Bootstrap and jQuery ####### */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
+    // commented out as using CDN's at the min
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
+//    }
+
+    @Bean
+    public LocalValidatorFactoryBean validatorFactoryBean() {
+        return new LocalValidatorFactoryBean();
     }
+
 
 }

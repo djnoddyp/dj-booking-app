@@ -1,6 +1,7 @@
 package pnodder.controllers;
 
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +13,19 @@ import pnodder.model.Booking;
 import pnodder.services.ArtistService;
 import pnodder.services.BookingService;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validator;
+import java.util.Set;
+
 @Controller
 public class MainController {
 
     private ArtistService artistService;
     private BookingService bookingService;
+
+    @Autowired
+    private Validator validator;
 
     public MainController(ArtistService artistService, BookingService bookingService) {
         this.artistService = artistService;
@@ -41,11 +50,12 @@ public class MainController {
     }
 
     @PostMapping("/submitbooking")
-    public String submitBooking(Booking booking, BindingResult bindingResult) {
-        if (!bindingResult.hasErrors()) {
+    public String submitBooking(@Valid Booking booking, BindingResult result, Model model) {
+        if (!result.hasErrors()) {
             bookingService.save(booking);
             return "redirect:/booking";
         } else {
+            //model.addAttribute("booking", booking);
             return "booking";
         }
     }
