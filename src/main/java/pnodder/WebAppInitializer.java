@@ -27,19 +27,9 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     }
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    protected Filter[] getServletFilters() {
         DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy("shiroFilter");
         delegatingFilterProxy.setTargetFilterLifecycle(true);
-        servletContext
-                .addFilter("shiroFilter", delegatingFilterProxy)
-                .addMappingForUrlPatterns(null, false, "/*");
-        super.onStartup(servletContext);
+        return new Filter[] {delegatingFilterProxy};
     }
-
-//    @Override
-//    protected Filter[] getServletFilters() {
-//        DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy("shiroFilter");
-//        delegatingFilterProxy.setTargetFilterLifecycle(true);
-//        return new Filter[] {delegatingFilterProxy};
-//    }
 }
