@@ -49,7 +49,9 @@
           <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">start here</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">
             <a class="dropdown-item" href="/mybookings">my bookings</a>
-            <a class="dropdown-item" href="/admin">admin</a>
+            <th:block th:if="${isAdminUser}">
+              <a class="dropdown-item" href="/users">users</a>
+            </th:block>
           </div>
         </li>
       </ul>

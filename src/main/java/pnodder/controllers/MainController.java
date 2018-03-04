@@ -2,7 +2,6 @@ package pnodder.controllers;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,16 +14,12 @@ import pnodder.services.ArtistService;
 import pnodder.services.BookingService;
 
 import javax.validation.Valid;
-import javax.validation.Validator;
 
 @Controller
 public class MainController {
 
     private ArtistService artistService;
     private BookingService bookingService;
-
-    @Autowired
-    private Validator validator;
 
     public MainController(ArtistService artistService, BookingService bookingService) {
         this.artistService = artistService;
@@ -47,6 +42,7 @@ public class MainController {
     public String getBookingForm(Model model) {
         Subject currentUser = SecurityUtils.getSubject();
         model.addAttribute("isLoggedIn", currentUser.isAuthenticated() ? true : false);
+        model.addAttribute("isAdminUser", currentUser.hasRole("admin") ? true : false);
         return "booking";
     }
 
@@ -56,7 +52,6 @@ public class MainController {
             bookingService.save(booking);
             return "redirect:/booking";
         } else {
-            //model.addAttribute("booking", booking);
             return "booking";
         }
     }

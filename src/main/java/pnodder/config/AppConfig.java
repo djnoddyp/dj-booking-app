@@ -7,11 +7,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
@@ -21,6 +20,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 @Configuration
 @ComponentScan("pnodder.*")
 @PropertySource("classpath:/app.properties")
+@EnableTransactionManagement
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     @Autowired
@@ -73,22 +73,25 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
     }
 
     @Bean
-    public ResourceDatabasePopulator databasePopulator() throws Exception {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("sql/schema.sql"));
-        // execute this on first startup only
-        //populator.addScript(new ClassPathResource("sql/data.sql"));
-        populator.populate(dataSource().getConnection());
-        return populator;
+    public DataSourceTransactionManager transactionManager() {
+        DataSourceTransactionManager tm = new DataSourceTransactionManager();
+        tm.setDataSource(dataSource());
+        return tm;
     }
 
-
-    /* ####### Bootstrap and jQuery ####### */
-    // commented out as using CDN's at the min
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
+    // uncomment to load db on startup
+//    @Bean
+//    public ResourceDatabasePopulator databasePopulator() throws Exception {
+//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+//        populator.addScript(new ClassPathResource("sql/schema.sql"));
+//        populator.addScript(new ClassPathResource("sql/data.sql"));
+//        populator.populate(dataSource().getConnection());
+//        return populator;
 //    }
+
+    /* ###### Transaction management ###### */
+
+
 
     @Bean
     public LocalValidatorFactoryBean validatorFactoryBean() {
