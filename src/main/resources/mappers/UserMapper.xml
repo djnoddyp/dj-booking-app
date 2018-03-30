@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pnodder.mappers.UserMapper">
+
+    <select id="findAllWithRolesPermissions" resultType="map">
+        SELECT users.username, user_roles.role_name, roles_permissions.permission FROM users
+          INNER JOIN user_roles ON users.username=user_roles.username
+          INNER JOIN roles_permissions ON user_roles.role_name=roles_permissions.role_name
+    </select>
+
+</mapper>

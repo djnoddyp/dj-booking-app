@@ -3,7 +3,10 @@ package pnodder.model;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -15,16 +18,13 @@ public class Booking {
     @Size(min = 1, max = 16)
     private String name;
 
-    //@DateTimeFormat(pattern = "dd-MM-yyyy")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull @Future
     private LocalDate date;
     
-    //@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @NotNull
     private LocalTime start;
     
-    //@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @NotNull
     private LocalTime finish;
 

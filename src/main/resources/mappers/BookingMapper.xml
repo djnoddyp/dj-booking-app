@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pnodder.mappers.BookingMapper">
+
+    <resultMap id="bookingResultMap" type="Booking">
+        <result property="name" column="Name"/>
+        <result property="date" column="Date"/>
+        <result property="start" column="StartTime"/>
+        <result property="finish" column="FinishTime"/>
+        <collection property="artists" column="ArtistID" ofType="Artist" select="selectArtistsForBooking"/>
+    </resultMap>
+
+    <select id="findAll" resultType="Booking">
+        SELECT * FROM Bookings
+    </select>
+
+    <select id="findById" resultType="Booking">
+        SELECT * FROM Bookings WHERE id = #{id}
+    </select>
+
+    <select id="findByName" resultType="Booking" resultMap="bookingResultMap">
+        SELECT Name, Date, StartTime, FinishTime, ArtistID
+          FROM Bookings WHERE Name = #{name}
+    </select>
+
+    <select id="findDistinctName" resultType="String">
+        SELECT DISTINCT Name FROM Bookings
+    </select>
+
+    <select id="selectArtistsForBooking" resultType="Artist">
+        SELECT * FROM Artists WHERE ID = #{ArtistID}
+    </select>
+
+    <insert id="save">
+        INSERT INTO Bookings (Name, Date, StartTime, FinishTime, ArtistID)
+                    VALUES (#{booking.name}, #{booking.date}, #{booking.start}, #{booking.finish}, #{artistId})
+    </insert>
+
+    <delete id="deleteByName" parameterType="Booking">
+        DELETE FROM Bookings WHERE Name = #{name}
+    </delete>
+
+</mapper>

@@ -1,14 +1,9 @@
 package pnodder.services;
 
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
+import pnodder.mappers.BookingMapper;
 import pnodder.model.Artist;
 import pnodder.model.Booking;
-import pnodder.repositories.BookingRepository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,31 +13,27 @@ import java.util.Set;
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private BookingRepository repository;
-    private TransactionTemplate transactionTemplate;
+    private BookingMapper bookingMapper;
 
-    public BookingServiceImpl(BookingRepository repository, DataSourceTransactionManager transactionManager) {
-        this.repository = repository;
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
+    public BookingServiceImpl(BookingMapper bookingMapper) {
+        this.bookingMapper = bookingMapper;
     }
 
     @Override
     public Booking findById(Integer id) {
-        return repository.findById(id);
+        return bookingMapper.findById(id);
     }
     
     @Override
     public List<Booking> findAll() {
-        return repository.findAll();
+        return bookingMapper.findAll();
     }
 
     @Override
     public List<Booking> findAllDistinct() {
-        List<String> names = repository.findDistinctName();
+        List<String> names = bookingMapper.findDistinctName();
         List<Booking> bookings = new ArrayList<>();
-        names.forEach(name -> {
-            bookings.add(findBookingByName(name));
-        });
+        names.forEach(name -> bookings.add(findBookingByName(name)));
         // sort bookings by date, soonest first
         bookings.sort((b1, b2) -> {
             if (b1.getDate().isAfter(b2.getDate())) {
@@ -58,17 +49,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void save(Booking booking) {
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                repository.save(booking);
-            }
-        });
+        for(Artist a : booking.getArtists()) {
+            bookingMapper.save(booking, a.getId());
+        }
     }
 
     @Override
     public Booking findBookingByName(String name) {
-        List<Booking> bookings = repository.findByName(name);
+        List<Booking> bookings = bookingMapper.findByName(name);
         Booking booking = new Booking();
         Set<Artist> artistSet = new HashSet<>();
         Double cost = 0d;
@@ -90,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void deleteByName(String name) {
-        repository.deleteByName(name);
+        bookingMapper.deleteByName(name);
     }
     
     @Override

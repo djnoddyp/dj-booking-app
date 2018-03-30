@@ -1,14 +1,19 @@
 package pnodder.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -20,7 +25,8 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 @Configuration
 @ComponentScan("pnodder.*")
 @PropertySource("classpath:/app.properties")
-@EnableTransactionManagement
+// scans for the myBatis mapper interfaces
+@MapperScan("pnodder.mappers")
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     @Autowired
@@ -77,6 +83,16 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         DataSourceTransactionManager tm = new DataSourceTransactionManager();
         tm.setDataSource(dataSource());
         return tm;
+    }
+
+    /* ###### myBatis ###### */
+    @Bean
+    public SqlSessionFactoryBean sqlSessionFactory() {
+        SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
+        sqlSessionFactory.setDataSource(dataSource());
+        sqlSessionFactory.setTypeAliasesPackage("pnodder.model");
+        sqlSessionFactory.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+        return sqlSessionFactory;
     }
 
     // uncomment to load db on startup
