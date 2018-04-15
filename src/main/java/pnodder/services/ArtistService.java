@@ -1,27 +1,11 @@
 package pnodder.services;
 
-import org.springframework.stereotype.Service;
 import pnodder.model.Artist;
-import pnodder.repositories.ArtistRepository;
 
 import java.util.List;
 
-@Service
-public class ArtistService {
-    
-    private ArtistRepository repository;
+public interface ArtistService {
+    List<Artist> findAll();
 
-    public ArtistService(ArtistRepository repository) {
-        this.repository = repository;
-    }
-
-    public List<Artist> findAll() {
-        return repository.findAll();
-    }
-
-    public Artist findById(Integer id) {
-        return repository.findById(id);
-    }
-    
-
+    Artist findById(Integer id);
 }

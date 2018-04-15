@@ -15,6 +15,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import pnodder.repositories.ArtistRepository;
+import pnodder.repositories.ArtistRepositoryImpl;
+import pnodder.repositories.BookingRepository;
+import pnodder.repositories.BookingRepositoryImpl;
+import pnodder.services.ArtistService;
+import pnodder.services.ArtistServiceImpl;
+import pnodder.services.BookingService;
+import pnodder.services.BookingServiceImpl;
 
 @EnableWebMvc
 @Configuration
@@ -98,5 +106,28 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         return new LocalValidatorFactoryBean();
     }
 
+    @Bean
+    public ArtistRepository artistRepository() {
+        ArtistRepository artistRepository = new ArtistRepositoryImpl(dataSource());
+        return artistRepository;
+    }
+
+    @Bean
+    public BookingRepository bookingRepository() {
+        BookingRepository bookingRepository = new BookingRepositoryImpl(dataSource(), artistService());
+        return bookingRepository;
+    }
+
+    @Bean
+    public ArtistService artistService() {
+        ArtistService artistService = new ArtistServiceImpl(artistRepository());
+        return artistService;
+    }
+
+    @Bean
+    public BookingService bookingService() {
+        BookingService bookingService = new BookingServiceImpl(bookingRepository(), transactionManager());
+        return bookingService;
+    }
 
 }

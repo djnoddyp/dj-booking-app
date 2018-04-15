@@ -1,9 +1,7 @@
 package pnodder.services;
 
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import pnodder.model.Artist;
@@ -15,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Service
 public class BookingServiceImpl implements BookingService {
 
     private BookingRepository repository;
